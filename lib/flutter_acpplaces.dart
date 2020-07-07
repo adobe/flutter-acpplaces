@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_acpplaces/src/flutter_acpplaces_objects.dart';
 
 /// Adobe Experience Platform Places API.
 class FlutterACPPlaces {
@@ -22,6 +23,11 @@ class FlutterACPPlaces {
   static Future<String> get extensionVersion async {
     final String version = await _channel.invokeMethod('extensionVersion');
     return version;
+  }
+
+  /// Clears out the client-side data for Places.
+  static Future<void> clear() async {
+    await _channel.invokeMethod('clear');
   }
 
   /// Returns all Points of Interest (POI) in which the device is currently known to be within.
@@ -35,8 +41,8 @@ class FlutterACPPlaces {
   }
 
   /// Returns the last latitude and longitude provided to the ACPPlaces Extension.
-  static Future<void> get LastKnownLocation async {
-    final Location location = await _channel.invokeMethod('getLastKnownLocation');
+  static Future<String> get LastKnownLocation async {
+    final String location = await _channel.invokeMethod('getLastKnownLocation');
     return location;
   }
 
@@ -56,7 +62,7 @@ class FlutterACPPlaces {
 
   /// Pass a Geofence and transition type to be processed by the SDK.
   /// This corresponds to Android ACPPlaces.processGeofence and iOS ACPPlaces.processRegionEvent
-  static Future<void> processGeofence(final Geofence geofence, final int transitionType) async {
+  static Future<void> processGeofence(final Geofence geofence, final ACPPlacesRegionEventType transitionType) async {
     await _channel.invokeMethod('processGeofence',{
       'Geofence': geofence,
       'TransitionType': transitionType
@@ -64,8 +70,8 @@ class FlutterACPPlaces {
   }
 
   /// Sets the authorization status in the Places extension.
-  static Future<void> setAuthorizationStatus(final PlacesAuthorizationStatus status) async {
-    await _channel.invokeMethod('setAuthorizationStatus', status ?? PlacesAuthorizationStatus.DENIED);
+  static Future<void> setAuthorizationStatus(final ACPPlacesAuthorizationStatus status) async {
+    await _channel.invokeMethod('setAuthorizationStatus', status ?? ACPPlacesAuthorizationStatus.DENIED);
   }
 
 }

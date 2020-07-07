@@ -25,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,9 +76,11 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
     } else if (METHOD_PLACES_PROCESS_GEOFENCE.equals((call.method))) {
       processGeofence(call.arguments);
       result.success(null);
-    } else (METHOD_PLACES_SET_AUTHORIZATION_STATUS.equals((call.method))) {
+    } else if (METHOD_PLACES_SET_AUTHORIZATION_STATUS.equals(call.method)){
       setAuthorizationStatus(call.arguments);
       result.success(null);
+    } else {
+      result.notImplemented();
     }
   }
 
