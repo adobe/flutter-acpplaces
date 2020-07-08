@@ -39,7 +39,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class FlutterACPPlacesPlugin implements MethodCallHandler {
 
   final static String METHOD_PLACES_CLEAR = "clear";
-  final static String METHOD_PLACES_EXTENSION_VERSION_PLACES = "extensionVersion";
+  final static String METHOD_PLACES_EXTENSION_VERSION = "extensionVersion";
   final static String METHOD_PLACES_GET_CURRENT_POINTS_OF_INTEREST = "getCurrentPointsOfInterest";
   final static String METHOD_PLACES_GET_LAST_KNOWN_LOCATION = "getLastKnownLocation";
   final static String METHOD_PLACES_GET_NEARBY_POINTS_OF_INTEREST = "getNearbyPointsOfInterest";
@@ -55,10 +55,10 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
   final static String LIMIT = "Limit";
   final static String LOCATION = "Location";
   final static String GEOFENCE = "Geofence";
-  final static String TRANSITIONTYPE = "TransitionType";
+  final static String TRANSITION_TYPE = "TransitionType";
   final static String RADIUS = "radius";
-  final static String EXPIRATIONDURATION = "expirationDuration";
-  final static String REQUESTID = "requestId";
+  final static String EXPIRATION_DURATION = "expirationDuration";
+  final static String REQUEST_ID = "requestId";
 
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_acpplaces");
@@ -67,7 +67,7 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
 
   @Override
   public void onMethodCall(MethodCall call, Result result) {
-    if (METHOD_PLACES_EXTENSION_VERSION_PLACES.equals(call.method)) {
+    if (METHOD_PLACES_EXTENSION_VERSION.equals(call.method)) {
       result.success(Places.extensionVersion());
     } else if (METHOD_PLACES_CLEAR.equals((call.method))) {
       Places.clear();
@@ -162,20 +162,20 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
       return;
     }
     Map<String, Object> params = (Map<String, Object>) arguments;
-    if (!(params.get(GEOFENCE) instanceof Map) || !(params.get(TRANSITIONTYPE) instanceof Integer)) {
+    if (!(params.get(GEOFENCE) instanceof Map) || !(params.get(TRANSITION_TYPE) instanceof Integer)) {
       Log.e(LOG_TAG, "Process Geofence failed because arguments were invalid");
       return;
     }
 
     final Map<String, Object> geofenceMap = (Map<String, Object>) params.get(GEOFENCE);
     final Integer radius = (Integer)geofenceMap.get(RADIUS);
-    final Integer expirationDuration = (Integer)geofenceMap.get(EXPIRATIONDURATION);
-    final int transitionType = (int)params.get(TRANSITIONTYPE);
+    final Integer expirationDuration = (Integer)geofenceMap.get(EXPIRATION_DURATION);
+    final int transitionType = (int)params.get(TRANSITION_TYPE);
     final Geofence geofence = new Geofence.Builder()
             .setCircularRegion((Double)geofenceMap.get(LATITUDE), (Double)geofenceMap.get(LONGITUDE), radius.floatValue())
             .setExpirationDuration(expirationDuration.longValue())
             .setTransitionTypes(transitionType)
-            .setRequestId((String)geofenceMap.get(REQUESTID))
+            .setRequestId((String)geofenceMap.get(REQUEST_ID))
             .build();
     Places.processGeofence(geofence, transitionType);
   }

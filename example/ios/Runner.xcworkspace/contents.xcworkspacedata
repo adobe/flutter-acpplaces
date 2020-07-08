@@ -2,6 +2,15 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Runner/adobe-sj.gpx">
+   </FileRef>
+   <FileRef
+      location = "group:Runner/downtown-sanmateo.gpx">
+   </FileRef>
+   <FileRef
       location = "group:Runner.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
