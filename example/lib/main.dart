@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                 children: <Widget>[
                   RaisedButton(
                     child: Text('Current Points of Interest = $_currentpois\n'),
-                    onPressed: () => FlutterACPPlaces.currentPointsOfInterest,
+                    onPressed: () => getCurrentPointsOfInterest(),
                   ),
                 ]),
             Row(

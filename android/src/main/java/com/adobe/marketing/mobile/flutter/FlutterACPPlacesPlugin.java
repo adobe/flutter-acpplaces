@@ -136,7 +136,7 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
       Log.e(LOG_TAG, "Get Nearby Points of Interest failed because arguments were invalid");
       return;
     }
-    
+
     final Location location = new Location("default provider");
     final Map<String, Object> locationMap = (Map<String, Object>) params.get(LOCATION);
     location.setLatitude((Double)locationMap.get(LATITUDE));
