@@ -43,36 +43,40 @@ class ACPPlacesRegionEventType {
   const ACPPlacesRegionEventType(2);
 }
 
-/// This is an object representing a point of interest
-class PlacesPoi {
-  final Map<dynamic, dynamic> _data;
-
-  PlacesPoi(this._data);
-  String get name => _data['name'];
-  Double get latitude => _data['latitude'];
-  Double get longitude => _data['longitude'];
-  String get identifier =>
-      _data['identifier'];
-
-  @override
-  String toString() {
-    return '$runtimeType($_data)';
-  }
-}
-
 /// This is an object representing a geofence
 class Geofence {
-  final Map<dynamic, dynamic> _data;
+  Map<dynamic, dynamic> _data;
 
   Geofence(this._data);
-  String get requestId => _data['requestId'];
-  Double get latitude => _data['latitude'];
-  Double get longitude => _data['longitude'];
-  Float get radius => _data['radius'];
-  Float get expirationDuration => _data['expirationDuration'];
 
-  @override
-  String toString() {
-    return '$runtimeType($_data)';
+  Geofence.createGeofence(final String requestId, final Double latitude, final Double longitude, final Double radius, final Double expirationDuration) {
+    final Map<dynamic, dynamic> geofenceConstructorData = {
+      "requestId": requestId,
+      "latitude": latitude,
+      "longitude": longitude,
+      "radius": radius,
+      "expirationDuration": expirationDuration
+    };
+    this._data = geofenceConstructorData;
   }
+
+  set data(Map<dynamic, dynamic> val) => _data = val;
+
+  /// Dictionary representation of this event
+  Map<dynamic, dynamic> get data => _data;
+
+  /// The request id
+  String get requestId => _data['requestId'];
+
+  /// The latitude
+  Double get latitude => _data['latitude'];
+
+  /// The longitude
+  Double get longitude => _data['longitude'];
+
+  /// The radius
+  Double get radius => _data['radius'];
+
+  /// The expiration duration
+  Double get expirationDuration => _data['expirationDuration'];
 }

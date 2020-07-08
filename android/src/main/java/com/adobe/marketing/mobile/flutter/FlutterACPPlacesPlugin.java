@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.RandomAccess;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -48,12 +49,16 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
   final static String LOG_TAG = "ACPPlaces_Flutter";
 
   final static String POI = "POI";
-  final static String LATITUDE = "Latitude";
-  final static String LONGITUDE = "Longitude";
-  final static String LOWERCASE_LATITUDE = "latitude";
-  final static String LOWERCASE_LONGITUDE = "longitude";
-  final static String IDENTIFIER = "Identifier";
-  final static String PROVIDER = "generic provider";
+  final static String LATITUDE = "latitude";
+  final static String LONGITUDE = "longitude";
+  final static String IDENTIFIER = "identifier";
+  final static String LIMIT = "Limit";
+  final static String LOCATION = "Location";
+  final static String GEOFENCE = "Geofence";
+  final static String TRANSITIONTYPE = "TransitionType";
+  final static String RADIUS = "radius";
+  final static String EXPIRATIONDURATION = "expirationDuration";
+  final static String REQUESTID = "requestId";
 
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_acpplaces");
@@ -126,15 +131,17 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
       Log.e(LOG_TAG, "Get Nearby Points of Interest failed because arguments were invalid");
       return;
     }
-    Location location;
-    int limit;
     Map<String, Object> params = (Map<String, Object>) arguments;
-    if (!(params.get("Location") instanceof Location) || !(params.get("Limit") instanceof Integer)) {
+    if (!(params.get(LOCATION) instanceof Map) || !(params.get(LIMIT) instanceof Integer)) {
       Log.e(LOG_TAG, "Get Nearby Points of Interest failed because arguments were invalid");
+      return;
     }
-
-    location = (Location) params.get("Location");
-    limit = (int)params.get("Limit");
+    
+    final Location location = new Location("default provider");
+    final Map<String, Object> locationMap = (Map<String, Object>) params.get(LOCATION);
+    location.setLatitude((Double)locationMap.get(LATITUDE));
+    location.setLongitude((Double)locationMap.get(LONGITUDE));
+    final int limit = (int)params.get(LIMIT);
 
     Places.getNearbyPointsOfInterest(location, limit, new AdobeCallback<List<PlacesPOI>>() {
       @Override
@@ -154,24 +161,32 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
       Log.e(LOG_TAG, "Process Geofence failed because arguments were invalid");
       return;
     }
-    int transitionType;
-    Geofence geofence;
     Map<String, Object> params = (Map<String, Object>) arguments;
-    if (!(params.get("Geofence") instanceof Geofence) || !(params.get("TransitionType") instanceof Integer)) {
+    if (!(params.get(GEOFENCE) instanceof Map) || !(params.get(TRANSITIONTYPE) instanceof Integer)) {
       Log.e(LOG_TAG, "Process Geofence failed because arguments were invalid");
+      return;
     }
 
-    geofence = (Geofence)params.get("Geofence");
-    transitionType = (int)params.get("TransitionType");
+    final Map<String, Object> geofenceMap = (Map<String, Object>) params.get(GEOFENCE);
+    final Integer radius = (Integer)geofenceMap.get(RADIUS);
+    final Integer expirationDuration = (Integer)geofenceMap.get(EXPIRATIONDURATION);
+    final int transitionType = (int)params.get(TRANSITIONTYPE);
+    final Geofence geofence = new Geofence.Builder()
+            .setCircularRegion((Double)geofenceMap.get(LATITUDE), (Double)geofenceMap.get(LONGITUDE), radius.floatValue())
+            .setExpirationDuration(expirationDuration.longValue())
+            .setTransitionTypes(transitionType)
+            .setRequestId((String)geofenceMap.get(REQUESTID))
+            .build();
     Places.processGeofence(geofence, transitionType);
   }
 
   private void setAuthorizationStatus(final Object arguments) {
-    if (!(arguments instanceof PlacesAuthorizationStatus)) {
+    if (!(arguments instanceof Integer)) {
       Log.e(LOG_TAG, "Set Authorization Status failed because arguments were invalid");
       return;
     }
-    Places.setAuthorizationStatus((PlacesAuthorizationStatus)arguments);
+
+    Places.setAuthorizationStatus(getAuthorizationStatus((Integer)arguments));
   }
 
   private void runOnUIThread(Runnable runnable) {
@@ -197,5 +212,21 @@ public class FlutterACPPlacesPlugin implements MethodCallHandler {
       }
     }
     return jsonArray.toString();
+  }
+
+  private PlacesAuthorizationStatus getAuthorizationStatus(final int status){
+    if(status == 0) {
+      return  PlacesAuthorizationStatus.DENIED;
+    } else if(status == 1) {
+      return PlacesAuthorizationStatus.ALWAYS;
+    } else if(status == 2) {
+      return PlacesAuthorizationStatus.UNKNOWN;
+    } else if(status == 3) {
+      return PlacesAuthorizationStatus.RESTRICTED;
+    } else if(status == 4) {
+      return PlacesAuthorizationStatus.WHEN_IN_USE;
+    } else {
+      return null;
+    }
   }
 }

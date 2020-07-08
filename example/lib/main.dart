@@ -14,10 +14,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_acpcore/flutter_acpcore.dart';
 import 'package:flutter_acpplaces/flutter_acpplaces.dart';
 import 'package:flutter_acpplaces/src/flutter_acpplaces_objects.dart';
-import 'package:geofencing/geofencing.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,7 +28,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  String _pois = "null";
+  String _currentpois = "null";
+  String _nearbypois = "null";
   String _location = "null";
 
   @override
@@ -68,23 +67,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getCurrentPointsOfInterest() async {
-    List<dynamic> pois;
+    String pois;
     try {
-      pois = await FlutterACPPlaces.CurrentPointsOfInterest;
+      pois = await FlutterACPPlaces.currentPointsOfInterest;
     } on PlatformException {
       log("Failed to get the current POI's.");
     }
 
     if (!mounted) return;
     setState(() {
-      _pois = pois.toString();
+      _currentpois = pois.toString();
     });
   }
 
   Future<void> getLastKnownLocation() async {
     String location;
     try {
-      location = await FlutterACPPlaces.LastKnownLocation;
+      location = await FlutterACPPlaces.lastKnownLocation;
     } on PlatformException {
       log("Failed to get the last known location.");
     }
@@ -96,16 +95,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getNearbyPointsOfInterest() async {
-    List<dynamic> pois;
+    String pois;
     try {
-      pois = await FlutterACPPlaces.NearbyPointsOfInterest;
+      var location = {'latitude':37.3309422, 'longitude': -121.8939077};
+      pois = await FlutterACPPlaces.getNearbyPointsOfInterest(location, 100);
     } on PlatformException {
       log("Failed to get the nearby POI's.");
     }
 
     if (!mounted) return;
     setState(() {
-      _pois = pois.toString();
+      _nearbypois = pois.toString();
     });
   }
 
@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('ACPPlaces Plugin example app'),
         ),
         body: Center(
           child: Column(children: <Widget>[
@@ -132,23 +132,35 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                    child: Text("ACPPlaces.clear(...)"),
-                    onPressed: () => FlutterACPPlaces.clear(),
+                    child: Text('Current Points of Interest = $_currentpois\n'),
+                    onPressed: () => FlutterACPPlaces.currentPointsOfInterest,
                   ),
-                  RaisedButton(
-                    child: Text("ACPPlaces.getCurrentPointsOfInterest(...)"),
-                    onPressed: () => getCurrentPointsOfInterest(),
-                  ),
-                  Text('Current Points of Interest = $_pois\n'),
                 ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+              RaisedButton(
+                child: Text('Nearby Points of Interest = $_nearbypois\n'),
+                onPressed: () => getNearbyPointsOfInterest(),
+              ),
+            ]),
             RaisedButton(
-              child: Text("ACPPlaces.getLastKnownLocation()"),
-              onPressed: () => getLastKnownLocation(),
+              child: Text("ACPPlaces.clear()"),
+              onPressed: () => FlutterACPPlaces.clear(),
             ),
             RaisedButton(
-              child: Text("ACPPlaces.getNearbyPointsOfInterest()"),
-              onPressed: () => getNearbyPointsOfInterest(),
+              child: Text("ACPPlaces.setAuthorizationStatus()"),
+              onPressed: () => setAuthorizationStatus(),
             ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text('ACPPlaces.getLastKnownLocation()'),
+                    onPressed: () => getLastKnownLocation(),
+                  ),
+                  Text('Last known location = $_location\n'),
+                ]),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -156,27 +168,10 @@ class _MyAppState extends State<MyApp> {
                     child: Text("ACPPlaces.processGeofence()"),
                     onPressed: () => processGeofence(),
                   ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("ACPPlaces.setAuthorizationStatus()"),
-                    onPressed: () => setAuthorizationStatus(),
-                  ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("ACPAnalytics.getVisitorIdentifier()"),
-                    onPressed: () => setAuthorizationStatus(),
-                  ),
-            RaisedButton(
-              child: Text("ACPAnalytics.setVisitorIdentifier(vid)"),
-              onPressed: () => setAuthorizationStatus(),
-            ),
           ]),
-        ],
+        ]),
       ),
-      ])]))));
+    )
+    );
   }
 }

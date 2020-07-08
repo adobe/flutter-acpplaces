@@ -26,8 +26,10 @@ import com.adobe.marketing.mobile.WrapperType;
 import com.adobe.marketing.mobile.Places;
 
 import io.flutter.app.FlutterApplication;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugins.GeneratedPluginRegistrant;
 
-public class MyApplication extends FlutterApplication {
+public class MyApplication extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
 
     @Override
     public void onCreate() {
@@ -45,7 +47,7 @@ public class MyApplication extends FlutterApplication {
             MobileCore.start(new AdobeCallback() {
                 @Override
                 public void call(Object o) {
-                    MobileCore.configureWithAppID("yourAppId");
+                    MobileCore.configureWithAppID("94f571f308d5/bda071acf896/launch-189f3f522ee2-development");
                 }
             });
         } catch (InvalidInitException e) {
@@ -79,5 +81,10 @@ public class MyApplication extends FlutterApplication {
             @Override
             public void onActivityDestroyed(Activity activity) { /*no-op*/ }
         });
+    }
+
+    @Override
+    public void registerWith(PluginRegistry pluginRegistry) {
+        GeneratedPluginRegistrant.registerWith(pluginRegistry);
     }
 }
