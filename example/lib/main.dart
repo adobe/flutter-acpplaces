@@ -132,18 +132,26 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                    child: Text('Current Points of Interest = $_currentpois\n'),
+                    child: Text("ACPPlaces.getCurrentPointsOfInterest()"),
                     onPressed: () => getCurrentPointsOfInterest(),
                   ),
                 ]),
+            Flexible(
+                child:
+                new Text('Current Points of Interest = $_currentpois\n'),
+                ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
               RaisedButton(
-                child: Text('Nearby Points of Interest = $_nearbypois\n'),
+                child: Text("ACPPlaces.getNearbyPointsOfInterest()"),
                 onPressed: () => getNearbyPointsOfInterest(),
               ),
             ]),
+            Flexible(
+                child:
+                new Text('Nearby Points of Interest = $_nearbypois\n'),
+                ),
             RaisedButton(
               child: Text("ACPPlaces.clear()"),
               onPressed: () => FlutterACPPlaces.clear(),
@@ -159,8 +167,11 @@ class _MyAppState extends State<MyApp> {
                     child: Text('ACPPlaces.getLastKnownLocation()'),
                     onPressed: () => getLastKnownLocation(),
                   ),
-                  Text('Last known location = $_location\n'),
                 ]),
+            Flexible(
+                child:
+                new Text('Last known location = $_location\n'),
+            ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
