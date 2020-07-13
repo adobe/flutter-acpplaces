@@ -1,6 +1,6 @@
 # flutter_acpplaces
 
-[![pub package](https://img.shields.io/pub/v/flutter_acpplaces.svg)](https://pub.dartlang.org/packages/flutter_acpplaces) ![Build](https://github.com/adobe/flutter_acpplaces/workflows/Dart%20Unit%20Tests%20+%20Android%20Build%20+%20iOS%20Build/badge.svg) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![pub package](https://img.shields.io/pub/v/flutter_acpplaces.svg)](https://pub.dartlang.org/packages/flutter_acpplaces) ![Build](https://github.com/adobe/flutter-acpplaces/workflows/Dart%20Unit%20Tests%20+%20Android%20Build%20+%20iOS%20Build/badge.svg) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 `flutter_acpplaces` is a flutter plugin for the iOS and Android [AEP Places SDK](https://docs.adobe.com/content/help/en/places/using/places-ext-aep-sdks/places-extension/places-extension.html) to allow for integration with flutter applications. Functionality to enable the Places extension is provided entirely through Dart documented below.
 
