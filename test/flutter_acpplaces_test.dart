@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_acpplaces/flutter_acpplaces.dart';
-import 'package:flutter_acpplaces/src/flutter_acpplaces_objects.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('flutter_acpplaces');
@@ -152,7 +151,7 @@ void main() {
 
   group('processGeofence', () {
     final Geofence geofence = new Geofence({'requestId':'d4e72ade-0400-4280-9bfe-8ba7553a6444', 'latitude':37.3309422, 'longitude': -121.8939077, 'radius': 1000, 'expirationDuration':-1});
-    final ACPPlacesRegionEventType eventType = ACPPlacesRegionEventType.ENTRY;
+    final ACPPlacesRegionEventType eventType = ACPPlacesRegionEventType.entry;
     final List<MethodCall> log = <MethodCall>[];
 
     setUp(() {
@@ -175,7 +174,7 @@ void main() {
   });
 
   group('setAuthorizationStatus', () {
-    final ACPPlacesAuthorizationStatus status = ACPPlacesAuthorizationStatus.ALWAYS;
+    final ACPPlacesAuthorizationStatus status = ACPPlacesAuthorizationStatus.always;
     final List<MethodCall> log = <MethodCall>[];
 
     setUp(() {
