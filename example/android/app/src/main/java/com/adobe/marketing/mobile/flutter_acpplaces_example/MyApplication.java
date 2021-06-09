@@ -15,21 +15,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.adobe.marketing.mobile.AdobeCallback;
 import com.adobe.marketing.mobile.Identity;
 import com.adobe.marketing.mobile.InvalidInitException;
 import com.adobe.marketing.mobile.Lifecycle;
 import com.adobe.marketing.mobile.LoggingMode;
 import com.adobe.marketing.mobile.MobileCore;
+import com.adobe.marketing.mobile.Places;
 import com.adobe.marketing.mobile.Signal;
 import com.adobe.marketing.mobile.WrapperType;
-import com.adobe.marketing.mobile.Places;
 
 import io.flutter.app.FlutterApplication;
-import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 
-public class MyApplication extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
+public class MyApplication extends FlutterApplication {
 
     @Override
     public void onCreate() {
@@ -44,12 +41,7 @@ public class MyApplication extends FlutterApplication implements PluginRegistry.
             Lifecycle.registerExtension();
             Signal.registerExtension();
             Places.registerExtension();
-            MobileCore.start(new AdobeCallback() {
-                @Override
-                public void call(Object o) {
-                    MobileCore.configureWithAppID("94f571f308d5/bda071acf896/launch-189f3f522ee2-development");
-                }
-            });
+            MobileCore.start(o -> MobileCore.configureWithAppID("94f571f308d5/bda071acf896/launch-189f3f522ee2-development"));
         } catch (InvalidInitException e) {
             Log.e("MyApplication", String.format("Error while registering extensions %s", e.getLocalizedMessage()));
         }
@@ -81,10 +73,5 @@ public class MyApplication extends FlutterApplication implements PluginRegistry.
             @Override
             public void onActivityDestroyed(Activity activity) { /*no-op*/ }
         });
-    }
-
-    @Override
-    public void registerWith(PluginRegistry pluginRegistry) {
-        GeneratedPluginRegistrant.registerWith(pluginRegistry);
     }
 }

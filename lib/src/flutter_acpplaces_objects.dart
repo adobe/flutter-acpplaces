@@ -9,47 +9,91 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import 'dart:wasm';
-
 /// This is used to indicate the Places Authorization Status
-class ACPPlacesAuthorizationStatus {
-  final int value;
+enum ACPPlacesAuthorizationStatus {
+  denied,
+  always,
+  unknown,
+  restricted,
+  whenInUse
+}
 
-  const ACPPlacesAuthorizationStatus(this.value);
+extension ACPPlacesAuthorizationStatusExt on ACPPlacesAuthorizationStatus {
+  int get value {
+    switch (this) {
+      case ACPPlacesAuthorizationStatus.denied:
+        return 0;
+      case ACPPlacesAuthorizationStatus.always:
+        return 1;
+      case ACPPlacesAuthorizationStatus.unknown:
+        return 2;
+      case ACPPlacesAuthorizationStatus.restricted:
+        return 3;
+      case ACPPlacesAuthorizationStatus.whenInUse:
+        return 4;
+    }
+  }
+}
 
-  static const ACPPlacesAuthorizationStatus DENIED =
-  const ACPPlacesAuthorizationStatus(0);
-  static const ACPPlacesAuthorizationStatus ALWAYS =
-  const ACPPlacesAuthorizationStatus(1);
-  static const ACPPlacesAuthorizationStatus UNKNOWN =
-  const ACPPlacesAuthorizationStatus(2);
-  static const ACPPlacesAuthorizationStatus RESTRICTED =
-  const ACPPlacesAuthorizationStatus(3);
-  static const ACPPlacesAuthorizationStatus WHENINUSE =
-  const ACPPlacesAuthorizationStatus(4);
+extension ACPPlacesAuthorizationStatusValueExt on int {
+  ACPPlacesAuthorizationStatus get toACPPlacesAuthorizationStatus {
+    switch (this) {
+      case 0:
+        return ACPPlacesAuthorizationStatus.denied;
+      case 1:
+        return ACPPlacesAuthorizationStatus.always;
+      case 2:
+        return ACPPlacesAuthorizationStatus.unknown;
+      case 3:
+        return ACPPlacesAuthorizationStatus.restricted;
+      case 4:
+        return ACPPlacesAuthorizationStatus.whenInUse;
+    }
+    throw Exception('Invalid ACPPlacesAuthorizationStatus value: $this');
+  }
 }
 
 /// This is used to indicate the Region Event Type
-class ACPPlacesRegionEventType {
-  final int value;
+enum ACPPlacesRegionEventType { none, entry, exit }
 
-  const ACPPlacesRegionEventType(this.value);
+extension ACPPlacesRegionEventTypeExt on ACPPlacesRegionEventType {
+  int get value {
+    switch (this) {
+      case ACPPlacesRegionEventType.none:
+        return 0;
+      case ACPPlacesRegionEventType.entry:
+        return 1;
+      case ACPPlacesRegionEventType.exit:
+        return 2;
+    }
+  }
+}
 
-  static const ACPPlacesRegionEventType NONE =
-  const ACPPlacesRegionEventType(0);
-  static const ACPPlacesRegionEventType ENTRY =
-  const ACPPlacesRegionEventType(1);
-  static const ACPPlacesRegionEventType EXIT =
-  const ACPPlacesRegionEventType(2);
+extension ACPPlacesRegionEventTypeValueExt on int {
+  ACPPlacesRegionEventType get toACPPlacesRegionEventType {
+    switch (this) {
+      case 0:
+        return ACPPlacesRegionEventType.none;
+      case 1:
+        return ACPPlacesRegionEventType.entry;
+      case 2:
+        return ACPPlacesRegionEventType.exit;
+    }
+    throw Exception('Invalid ACPPlacesRegionEventType value: $this');
+  }
 }
 
 /// This is an object representing a geofence
 class Geofence {
-  Map<dynamic, dynamic> _data;
+  Geofence(this.data);
 
-  Geofence(this._data);
-
-  Geofence.createGeofence(final String requestId, final Double latitude, final Double longitude, final Double radius, final Double expirationDuration) {
+  Geofence.createGeofence(
+    String requestId,
+    double latitude,
+    double longitude,
+    double radius,
+    double expirationDuration,
+  ) {
     final Map<dynamic, dynamic> geofenceConstructorData = {
       "requestId": requestId,
       "latitude": latitude,
@@ -57,26 +101,24 @@ class Geofence {
       "radius": radius,
       "expirationDuration": expirationDuration
     };
-    this._data = geofenceConstructorData;
+    this.data = geofenceConstructorData;
   }
 
-  set data(Map<dynamic, dynamic> val) => _data = val;
-
   /// Dictionary representation of this event
-  Map<dynamic, dynamic> get data => _data;
+  late Map<dynamic, dynamic> data;
 
   /// The request id
-  String get requestId => _data['requestId'];
+  String? get requestId => data['requestId'];
 
   /// The latitude
-  Double get latitude => _data['latitude'];
+  double? get latitude => data['latitude'];
 
   /// The longitude
-  Double get longitude => _data['longitude'];
+  double? get longitude => data['longitude'];
 
   /// The radius
-  Double get radius => _data['radius'];
+  double? get radius => data['radius'];
 
   /// The expiration duration
-  Double get expirationDuration => _data['expirationDuration'];
+  double? get expirationDuration => data['expirationDuration'];
 }
