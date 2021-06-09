@@ -6,22 +6,16 @@ repository: https://github.com/adobe/flutter-acpplaces
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=2.0.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_acpcore:
+  flutter_acpcore: ">= 2.0.0 <3.0.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-dependency_overrides:
-  flutter_acpcore:
-    git:
-      url: https://github.com/adobe/flutter_acpcore.git
-      ref: 9a52db9bec20fa28a9348aefe25c3d3d47f45809
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
