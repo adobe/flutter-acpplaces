@@ -1,6 +1,6 @@
 name: flutter_acpplaces
 description: Official Adobe Experience Platform support for Flutter apps. The Places extension allows for integration with Adobe Places.
-version: 2.0.0
+version: 2.0.1
 homepage: https://aep-sdks.gitbook.io/docs/
 repository: https://github.com/adobe/flutter-acpplaces
 
