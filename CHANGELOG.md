@@ -1,3 +1,6 @@
+## 2.0.1
+* Migrate Android library from jcenter to mavenCentral.
+
 ## 2.0.0
 * Null-safety support
 
